@@ -9,7 +9,6 @@
 <br>
 
 ![Java](https://img.shields.io/badge/Java-100%25-orange?logo=openjdk&logoColor=white)
-![Maven](https://img.shields.io/badge/Build-Maven-C71A36?logo=apachemaven&logoColor=white)
 ![SQLite](https://img.shields.io/badge/Banco-SQLite-003B57?logo=sqlite&logoColor=white)
 ![Padrão](https://img.shields.io/badge/Padrão-DAO-blue)
 ![Evento](https://img.shields.io/badge/II%20InterConnect-Evolution-8A2BE2)
@@ -25,7 +24,7 @@
 - [Funcionalidades](#-funcionalidades)
 - [Arquitetura](#-arquitetura)
 - [Estrutura do código](#-estrutura-do-código)
-- [Como executar](#-como-executar)
+- [Como utilizar](#-como-utilizar-este-repositório)
 - [Decisões de projeto](#-decisões-de-projeto)
 - [Equipe](#-equipe)
 - [Roadmap](#-roadmap)
@@ -100,29 +99,11 @@ nutrimind-desktop/
 
 ---
 
-## 🚀 Como executar
+## 🚀 Como utilizar este repositório
 
-### Pré-requisitos
+Este repositório contém somente a camada de persistência em `src/main/java/br/com/nutrimind/`. Não há `pom.xml`, classe principal ou classes de modelo versionadas aqui. Portanto, `mvn clean install` não funciona nesta cópia isolada.
 
-- ☕ [JDK 17+](https://adoptium.net/)
-- 📦 [Maven](https://maven.apache.org/download.cgi)
-
-### Passo a passo
-
-```bash
-# 1. Clone o repositório
-git clone https://github.com/guilhermeestrela10/nutrimind-desktop.git
-
-# 2. Entre na pasta
-cd nutrimind-desktop
-
-# 3. Baixe as dependências e compile
-mvn clean install
-```
-
-> 💡 O banco **SQLite** é um arquivo local, então não é preciso instalar nenhum servidor de banco de dados.
-
-Para rodar a aplicação completa com a interface, use o repositório do grupo: [`nutrimind-mvp-desktop`](https://github.com/karlitus222/nutrimind-mvp-desktop).
+Para executar a aplicação completa, consulte o [MVP integrado do grupo](https://github.com/karlitus222/nutrimind-mvp-desktop) e siga as instruções daquele repositório. Os DAOs daqui dependem dos modelos do projeto e do driver JDBC do SQLite.
 
 ---
 
@@ -146,11 +127,7 @@ Separa a lógica do sistema do acesso ao banco. Se amanhã o banco mudar, só a 
 Evita múltiplas conexões abertas ao mesmo tempo e mantém a configuração do banco em um único lugar.
 </details>
 
-<details>
-<summary><b>Por que Maven?</b></summary>
 
-Padroniza a estrutura do projeto e automatiza o download de dependências e o build, o que ajuda muito no trabalho em grupo.
-</details>
 
 ---
 
@@ -161,9 +138,6 @@ Projeto desenvolvido em grupo por estudantes de Engenharia de Software do UNIFSA
 | Integrante | Contribuição |
 |---|---|
 | **Guilherme Estrela** ([@guilhermeestrela10](https://github.com/guilhermeestrela10)) | Camada de persistência (DAO) e integração com o banco de dados |
-| _Nome do integrante_ | _Responsabilidade_ |
-| _Nome do integrante_ | _Responsabilidade_ |
-| _Nome do integrante_ | _Responsabilidade_ |
 
 ---
 
