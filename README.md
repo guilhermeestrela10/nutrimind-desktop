@@ -1,161 +1,63 @@
-<div align="center">
+# Nutrimind Desktop — persistência
 
-# 🥗 Nutrimind Desktop
+Camada de acesso a dados em Java para o projeto acadêmico de gestão nutricional Nutrimind. Reúne contratos DAO, consultas JDBC e gerenciamento de conexão com SQLite.
 
-### Gestão nutricional inteligente, na palma da sua mesa
+**Estado:** módulo parcial. Este repositório não é uma aplicação executável isolada.
 
-*Cuidar da alimentação começa por organizar o cuidado. O Nutrimind reúne pacientes, consultas e relatórios em um só lugar.*
+[Componentes](#componentes) · [Integração](#integração) · [Estrutura](#estrutura) · [Limitações](#limitações)
 
-<br>
+## Contexto
 
-![Java](https://img.shields.io/badge/Java-100%25-orange?logo=openjdk&logoColor=white)
-![SQLite](https://img.shields.io/badge/Banco-SQLite-003B57?logo=sqlite&logoColor=white)
-![Padrão](https://img.shields.io/badge/Padrão-DAO-blue)
-![Evento](https://img.shields.io/badge/II%20InterConnect-Evolution-8A2BE2)
-![UNIFSA](https://img.shields.io/badge/UNIFSA-Eng.%20de%20Software-success)
+Projeto em grupo de Engenharia de Software no UNIFSA, apresentado no II InterConnect Evolution. A contribuição registrada de Guilherme Estrela é a camada de persistência e a integração com o banco.
 
-</div>
+A [versão integrada do grupo](https://github.com/karlitus222/nutrimind-mvp-desktop) está em outro repositório, mantido pela equipe.
 
----
+## Componentes
 
-## 📑 Sumário
-
-- [Sobre o projeto](#-sobre-o-projeto)
-- [Funcionalidades](#-funcionalidades)
-- [Arquitetura](#-arquitetura)
-- [Estrutura do código](#-estrutura-do-código)
-- [Como utilizar](#-como-utilizar-este-repositório)
-- [Decisões de projeto](#-decisões-de-projeto)
-- [Equipe](#-equipe)
-- [Roadmap](#-roadmap)
-
----
-
-## 💡 Sobre o projeto
-
-O **Nutrimind** é uma aplicação **desktop em Java** voltada à gestão de atendimentos nutricionais. Ele foi pensado para facilitar o dia a dia de quem cuida da saúde alimentar de outras pessoas: cadastrar pacientes, registrar consultas e acompanhar a evolução por meio de relatórios.
-
-Este projeto nasceu como o **trabalho principal do nosso grupo** no curso de **Engenharia de Software** do **UNIFSA (Centro Universitário Santo Agostinho)**, acompanhando a gente ao longo do período e sendo apresentado no evento acadêmico **II InterConnect Evolution**.
-
-> 🎯 **Objetivo:** aplicar, em um projeto completo e realista, tudo o que aprendemos sobre programação orientada a objetos, banco de dados, padrões de projeto e trabalho em equipe.
-
-> 📦 Este repositório contém a **camada de persistência** do projeto. A versão integrada do grupo (MVP) está em [`karlitus222/nutrimind-mvp-desktop`](https://github.com/karlitus222/nutrimind-mvp-desktop).
-
----
-
-## ✨ Funcionalidades
-
-| | Módulo | O que faz |
-|---|---|---|
-| 👤 | **Usuários** | Cadastro e gerenciamento dos usuários do sistema |
-| 🧑‍⚕️ | **Pacientes** | Registro e acompanhamento dos pacientes atendidos |
-| 📅 | **Consultas** | Agendamento e histórico de consultas |
-| 📊 | **Relatórios** | Consulta de informações para acompanhar a evolução |
-| 🛡️ | **Tratamento de erros** | Exceção própria da aplicação, com mensagens claras |
-
----
-
-## 🏗️ Arquitetura
-
-O acesso aos dados segue o padrão **DAO (Data Access Object)**: cada entidade tem uma classe responsável por conversar com o banco, e todas compartilham uma base comum de operações CRUD.
+| Componente | Responsabilidade |
+| --- | --- |
+| `Database` | Gerenciamento da conexão SQLite, inicialização e encerramento |
+| `CrudDao<T, ID>` | Contrato genérico das operações CRUD |
+| `UserDao` | Persistência de usuários |
+| `PatientDao` | Persistência de pacientes |
+| `ConsultationDao` | Persistência de consultas |
+| `ReportDao` | Consultas para relatórios |
+| `AppException` | Encapsulamento de falhas da aplicação |
 
 ```mermaid
 flowchart LR
-    A[🖥️ Aplicação Desktop] --> B[UserDao]
-    A --> C[PatientDao]
-    A --> D[ConsultationDao]
-    A --> E[ReportDao]
-    B & C & D & E --> F[CrudDao]
-    F --> G[(⚙️ Database<br/>Singleton)]
-    G --> H[(🗄️ SQLite)]
-    F -. erros .-> I[AppException]
+    Modelos[Modelos do projeto integrado] --> DAOs[DAOs específicos]
+    DAOs -. contrato .-> CRUD[CrudDao]
+    DAOs --> Conexao[Database]
+    Conexao --> SQLite[(SQLite)]
+    DAOs -. falhas .-> Erro[AppException]
 ```
 
-### 🧠 Em palavras simples
+## Integração
 
-- **DAO**: em vez de espalhar comandos SQL pelo sistema, cada tabela tem uma classe "porteira" que cuida de ler e gravar os dados.
-- **CrudDao**: guarda o que todo mundo precisa em comum (criar, ler, atualizar e apagar), evitando código repetido.
-- **Database (Singleton)**: garante que existe **uma única** configuração/conexão com o banco, compartilhada por toda a aplicação.
-- **AppException**: um tipo de erro próprio, para tratar falhas do sistema de forma organizada.
+Os fontes ficam em `src/main/java/br/com/nutrimind/`. Eles dependem das classes de modelo de `br.com.nutrimind.model` e do driver JDBC do SQLite.
 
----
+Esta cópia não contém os modelos, `pom.xml`, esquema inicial completo nem classe principal. Portanto, `mvn clean install` não é um comando válido para este repositório isolado. Para executar o produto, siga as instruções do MVP integrado.
 
-## 🗂️ Estrutura do código
+## Estrutura
 
-```
-nutrimind-desktop/
-└── src/main/java/br/com/nutrimind/
-    ├── config/
-    │   └── Database.java          # Configuração e acesso ao SQLite (Singleton)
-    ├── dao/
-    │   ├── CrudDao.java           # Base com as operações CRUD genéricas
-    │   ├── UserDao.java           # Persistência de usuários
-    │   ├── PatientDao.java        # Persistência de pacientes
-    │   ├── ConsultationDao.java   # Persistência de consultas
-    │   └── ReportDao.java         # Persistência de relatórios
-    └── exception/
-        └── AppException.java      # Exceção personalizada da aplicação
+```text
+src/main/java/br/com/nutrimind/
+├── config/       Conexão com o banco
+├── dao/          Contratos e implementações de persistência
+└── exception/    Exceções da aplicação
 ```
 
----
+## Decisões de projeto
 
-## 🚀 Como utilizar este repositório
+- **SQLite:** armazenamento local sem servidor de banco dedicado.
+- **DAO:** separação entre as operações de dados e os consumidores da aplicação.
+- **Conexão centralizada:** configuração compartilhada em `Database`.
 
-Este repositório contém somente a camada de persistência em `src/main/java/br/com/nutrimind/`. Não há `pom.xml`, classe principal ou classes de modelo versionadas aqui. Portanto, `mvn clean install` não funciona nesta cópia isolada.
+## Limitações
 
-Para executar a aplicação completa, consulte o [MVP integrado do grupo](https://github.com/karlitus222/nutrimind-mvp-desktop) e siga as instruções daquele repositório. Os DAOs daqui dependem dos modelos do projeto e do driver JDBC do SQLite.
+Não há suíte de testes DAO nesta cópia. A apresentação dos componentes descreve o código disponível, sem comprovar integração ponta a ponta. Relatórios em PDF e plano alimentar personalizado não fazem parte desta entrega.
 
----
+## Autoria e equipe
 
-## 🧭 Decisões de projeto
-
-<details>
-<summary><b>Por que SQLite?</b></summary>
-
-É leve, não exige servidor e guarda tudo em um único arquivo. Para um app desktop, isso deixa a instalação e a apresentação muito mais simples.
-</details>
-
-<details>
-<summary><b>Por que o padrão DAO?</b></summary>
-
-Separa a lógica do sistema do acesso ao banco. Se amanhã o banco mudar, só a camada DAO precisa ser ajustada.
-</details>
-
-<details>
-<summary><b>Por que Singleton na conexão?</b></summary>
-
-Evita múltiplas conexões abertas ao mesmo tempo e mantém a configuração do banco em um único lugar.
-</details>
-
-
-
----
-
-## 👥 Equipe
-
-Projeto desenvolvido em grupo por estudantes de Engenharia de Software do UNIFSA.
-
-| Integrante | Contribuição |
-|---|---|
-| **Guilherme Estrela** ([@guilhermeestrela10](https://github.com/guilhermeestrela10)) | Camada de persistência (DAO) e integração com o banco de dados |
-
----
-
-## 🗺️ Roadmap
-
-- [x] Camada de persistência com padrão DAO
-- [x] Operações CRUD para usuários, pacientes, consultas e relatórios
-- [x] Tratamento de erros com exceção própria
-- [ ] Testes automatizados da camada DAO
-- [ ] Geração de relatórios em PDF
-- [ ] Plano alimentar personalizado por paciente
-
----
-
-<div align="center">
-
-### 🌱 Feito com dedicação, café e muito trabalho em equipe
-
-**UNIFSA** · Engenharia de Software · II InterConnect Evolution
-
-</div>
+Desenvolvimento acadêmico em grupo. Contribuição documentada neste repositório: **Guilherme Estrela — camada de persistência e integração com o banco**. As demais responsabilidades devem ser consultadas na documentação da equipe.
