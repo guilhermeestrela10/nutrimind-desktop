@@ -1,6 +1,6 @@
-# Nutrimind Desktop — persistência
+# Nutrimind Persistence
 
-Camada de acesso a dados em Java para o projeto acadêmico de gestão nutricional Nutrimind. Reúne contratos DAO, consultas JDBC e gerenciamento de conexão com SQLite.
+Camada de acesso a dados em Java para a plataforma de gestão nutricional Nutrimind. Reúne contratos DAO, consultas JDBC e gerenciamento de conexão com SQLite.
 
 **Estado:** módulo parcial. Este repositório não é uma aplicação executável isolada.
 
@@ -8,7 +8,7 @@ Camada de acesso a dados em Java para o projeto acadêmico de gestão nutriciona
 
 ## Contexto
 
-Projeto em grupo de Engenharia de Software no UNIFSA, apresentado no II InterConnect Evolution. A contribuição registrada de Guilherme Estrela é a camada de persistência e a integração com o banco.
+Módulo desenvolvido de forma colaborativa para o Nutrimind. A contribuição registrada de Guilherme Estrela é a camada de persistência e a integração com o banco.
 
 A [versão integrada do grupo](https://github.com/karlitus222/nutrimind-mvp-desktop) está em outro repositório, mantido pela equipe.
 
@@ -60,4 +60,4 @@ Não há suíte de testes DAO nesta cópia. A apresentação dos componentes des
 
 ## Autoria e equipe
 
-Desenvolvimento acadêmico em grupo. Contribuição documentada neste repositório: **Guilherme Estrela — camada de persistência e integração com o banco**. As demais responsabilidades devem ser consultadas na documentação da equipe.
+Desenvolvimento colaborativo. Contribuição documentada neste repositório: **Guilherme Estrela — camada de persistência e integração com o banco**. As demais responsabilidades devem ser consultadas na documentação da equipe.
